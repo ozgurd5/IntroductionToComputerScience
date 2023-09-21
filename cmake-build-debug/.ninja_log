@@ -1,0 +1,22 @@
+# ninja log v5
+1	88	7168967384863953	build.ninja	f1e4839d4ac4b156
+2	72	7168966418509105	CMakeFiles/IntroductionToComputerScience.dir/S1Week1.c.obj	a13e3b4004d312a4
+72	148	7168966419235324	IntroductionToComputerScience.exe	9af55fd998f2e89a
+7	55	7168966418342009	CMakeFiles/IntroductionToComputerScience.dir/MainFile.c.obj	b652a2384216f7bb
+8	79	7168967500224763	CMakeFiles/IntroductionToComputerScience.dir/MainFile.c.obj	655f610cc8a025d1
+2	95	7168967500383608	CMakeFiles/IntroductionToComputerScience.dir/S1Week1.c.obj	f75983fc876818a6
+95	176	7168967501164505	IntroductionToComputerScience.exe	9af55fd998f2e89a
+1	64	7168975366541587	CMakeFiles/IntroductionToComputerScience.dir/S1Week1.c.obj	f75983fc876818a6
+65	136	7168975367212746	IntroductionToComputerScience.exe	9af55fd998f2e89a
+2	75	7168989164452033	CMakeFiles/IntroductionToComputerScience.dir/S1Week1.c.obj	f75983fc876818a6
+76	158	7168989165234418	IntroductionToComputerScience.exe	9af55fd998f2e89a
+1	72	7168990846806514	CMakeFiles/IntroductionToComputerScience.dir/S1Week1.c.obj	f75983fc876818a6
+72	150	7168990847560055	IntroductionToComputerScience.exe	9af55fd998f2e89a
+3	78	7168993357831139	CMakeFiles/IntroductionToComputerScience.dir/S1Week1.c.obj	f75983fc876818a6
+78	156	7168993358571277	IntroductionToComputerScience.exe	9af55fd998f2e89a
+2	77	7169000893972353	CMakeFiles/IntroductionToComputerScience.dir/S1Week1.c.obj	f75983fc876818a6
+77	161	7169000894776697	IntroductionToComputerScience.exe	9af55fd998f2e89a
+3	75	7169002730795353	CMakeFiles/IntroductionToComputerScience.dir/S1Week1.c.obj	f75983fc876818a6
+76	153	7169002731543708	IntroductionToComputerScience.exe	9af55fd998f2e89a
+2	96	7169614426516729	CMakeFiles/IntroductionToComputerScience.dir/S1Week1.c.obj	f75983fc876818a6
+96	318	7169614428727932	IntroductionToComputerScience.exe	9af55fd998f2e89a
