@@ -8,10 +8,10 @@
 		},
 		"paths" : 
 		{
-			"cmake" : "C:/Users/ozgur/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/win/x64/bin/cmake.exe",
-			"cpack" : "C:/Users/ozgur/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/win/x64/bin/cpack.exe",
-			"ctest" : "C:/Users/ozgur/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/win/x64/bin/ctest.exe",
-			"root" : "C:/Users/ozgur/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/bin/cmake/win/x64/share/cmake-3.26"
+			"cmake" : "C:/Users/ozgur/AppData/Local/Programs/CLion/bin/cmake/win/x64/bin/cmake.exe",
+			"cpack" : "C:/Users/ozgur/AppData/Local/Programs/CLion/bin/cmake/win/x64/bin/cpack.exe",
+			"ctest" : "C:/Users/ozgur/AppData/Local/Programs/CLion/bin/cmake/win/x64/bin/ctest.exe",
+			"root" : "C:/Users/ozgur/AppData/Local/Programs/CLion/bin/cmake/win/x64/share/cmake-3.26"
 		},
 		"version" : 
 		{
@@ -35,7 +35,7 @@
 			}
 		},
 		{
-			"jsonFile" : "cache-v2-4bd1778b23917bf14aa1.json",
+			"jsonFile" : "cache-v2-64c3cf41e9908e31c235.json",
 			"kind" : "cache",
 			"version" : 
 			{
@@ -44,7 +44,7 @@
 			}
 		},
 		{
-			"jsonFile" : "cmakeFiles-v1-ab386d3199a49e24ea0d.json",
+			"jsonFile" : "cmakeFiles-v1-49297dc2e18bc58c7e60.json",
 			"kind" : "cmakeFiles",
 			"version" : 
 			{
@@ -53,7 +53,7 @@
 			}
 		},
 		{
-			"jsonFile" : "toolchains-v1-7344d3c2c1edf4e97877.json",
+			"jsonFile" : "toolchains-v1-6db45a8fa14cdc2dbba1.json",
 			"kind" : "toolchains",
 			"version" : 
 			{
@@ -66,7 +66,7 @@
 	{
 		"cache-v2" : 
 		{
-			"jsonFile" : "cache-v2-4bd1778b23917bf14aa1.json",
+			"jsonFile" : "cache-v2-64c3cf41e9908e31c235.json",
 			"kind" : "cache",
 			"version" : 
 			{
@@ -76,7 +76,7 @@
 		},
 		"cmakeFiles-v1" : 
 		{
-			"jsonFile" : "cmakeFiles-v1-ab386d3199a49e24ea0d.json",
+			"jsonFile" : "cmakeFiles-v1-49297dc2e18bc58c7e60.json",
 			"kind" : "cmakeFiles",
 			"version" : 
 			{
@@ -96,7 +96,7 @@
 		},
 		"toolchains-v1" : 
 		{
-			"jsonFile" : "toolchains-v1-7344d3c2c1edf4e97877.json",
+			"jsonFile" : "toolchains-v1-6db45a8fa14cdc2dbba1.json",
 			"kind" : "toolchains",
 			"version" : 
 			{
