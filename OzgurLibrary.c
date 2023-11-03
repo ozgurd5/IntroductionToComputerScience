@@ -72,6 +72,18 @@ void TurnIntToCharArray(int intValue, char* charArray, const size_t charArraySiz
     ReverseCharArray(charArray, charArraySize);
 }
 
+char TurnSingleDigitToChar(const int singleDigitValue)
+{
+    return (char)(singleDigitValue + 48); //Numbers starts from 48 in ASCII
+}
+
+int TurnCharToInt(const char charValue)
+{
+    if (charValue == '\0') return 0;
+    else return (int)charValue - 48; //Numbers starts from 48 in ASCII
+}
+
+//TODO FIX: "ABCxxx" REVERSE AS "xxCBAx"
 void ReverseCharArray(char* charArray, const size_t charArraySize)
 {
     char temp;

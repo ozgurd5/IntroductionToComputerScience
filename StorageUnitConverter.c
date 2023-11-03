@@ -7,7 +7,7 @@ void PrintUnits();
 void DecideForUnitName(char* unitNameArray,const int unitID);
 long double CalculateSecondAmount(const int firstUnitID, const long double firstUnitAmount, const int secondUnitNumber);
 
-void S1Week1()
+void RunStorageUnitConverter()
 {
     int firstUnitID;
     char firstUnitName[8];

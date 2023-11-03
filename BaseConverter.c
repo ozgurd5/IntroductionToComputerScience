@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include "OzgurLibrary.h"
-#include "S1Week2.h"
+#include "BaseConverter.h"
 
 int IsInputInTheRightFormat(const int inputBase, const char* userInput, const size_t userInputSize);
 
@@ -11,16 +11,18 @@ int IsCharArrayBase8(const char* charArray, const size_t charArraySize);
 int IsCharArrayBase10(const char* charArray, const size_t charArraySize);
 int IsCharArrayBase16(const char* charArray, const size_t charArraySize);
 
-int From2To10(const char* userInput, const int userInputRealSize);
+int From2To10(const char* input, const int inputRealSize);
+void From2To8(const char* input, const int inputRealSize, char* resultCharArray);
 
-void S1Week2()
+void RunBaseConverter()
 {
     int inputBase;
     int outputBase;
-    char output[20];
+    int inputRealSize;
     char input[20];
     ClearCharArray(input, sizeof input);
-    int userInputRealSize;
+    char output[20];
+    ClearCharArray(output, sizeof output);
 
 
     //TAKE INPUT BASE
@@ -40,8 +42,7 @@ void S1Week2()
         if (IsInputInTheRightFormat(inputBase, input, sizeof input)) break;
         else printf("Error. Please enter the number in the base of %d again: (Max 20 digit, no 0 at the beginning, positive only)\n", inputBase);
     }
-    userInputRealSize = FindRealSizeOfTheCharArray(input, sizeof input);
-    printf("\naaa: %d\n", userInputRealSize);
+    inputRealSize = FindRealSizeOfTheCharArray(input, sizeof input);
 
     //TAKE OUTPUT BASE
     printf("Select base to convert ");
@@ -55,7 +56,13 @@ void S1Week2()
     }
 
     //CALCULATE OUTPUT NUMBER
-    if (inputBase == 2 && outputBase == 10) printf("%d", From2To10(input, userInputRealSize));
+    if (inputBase == 2 && outputBase == 10) {
+        printf("%d", From2To10(input, inputRealSize));
+        return;
+    }
+
+    if (inputBase == 2 && outputBase == 8) From2To8(input, inputRealSize, output);
+    PrintCharArray(output, sizeof output);
 }
 
 int IsInputInTheRightFormat(const int inputBase, const char* userInput, const size_t userInputSize)
@@ -70,6 +77,7 @@ int IsInputInTheRightFormat(const int inputBase, const char* userInput, const si
     else return IsCharArrayBase16(userInput, userInputSize);
 }
 
+#pragma region ArrayBaseCheck
 int IsCharArrayBase2(const char* charArray, const size_t charArraySize)
 {
     for (int i = 0; i < charArraySize; ++i)
@@ -118,8 +126,73 @@ int IsCharArrayBase16(const char* charArray, const size_t charArraySize)
 
     return 1;
 }
+#pragma endregion
 
-void From2To8(const char* userInput, const int userInputRealSize, const char* resultArray)
+#pragma Converter Functions
+void From2To8(const char* input, const int inputRealSize, char* resultCharArray)
+{
+    //Divides binary number into groups of three (reverse), converts each group decimal and puts them in the resultCharArray (reverse).
+
+    int resultDigitNumber;
+    if (inputRealSize % 3 == 0) resultDigitNumber = inputRealSize / 3;
+    else resultDigitNumber = inputRealSize / 3 + 1;
+
+    char trio[3];
+    ClearCharArray(trio, sizeof trio);
+
+    int currentTrioIndex = 2;
+    int currentResultCharArrayIndex = resultDigitNumber - 1;
+
+    for (int i = inputRealSize - 1; i >= 0; --i)
+    {
+        trio[currentTrioIndex] = input[i];
+
+        if (currentTrioIndex == 0)
+        {
+            resultCharArray[currentResultCharArrayIndex] = TurnSingleDigitToChar(From2To10(trio, 3));
+
+            currentTrioIndex = 3; //It has to be 3, because of the "currentTrioIndex--;" in the last line of the loop.
+            currentResultCharArrayIndex--;
+            ClearCharArray(trio, sizeof trio);
+        }
+
+        currentTrioIndex--;
+    }
+
+    if (currentTrioIndex != 2)
+    {
+        //In this condition trio may be (x is '\0'): xx0, x00, xx1, x11. To make things by the book we have to make trio start with a number, not..
+        //..with an empty character. This still works because TurnCharToInt method returns 0 when it encounters with '\0' and it accidentally doesn't..
+        //..break anything in the From2To10() function.
+
+        //TODO: UPDATE THIS COMMENT AFTER LIBRARY CHANGING
+        //We can reverse the trio array but ReverseCharArray() function doesn't reverse a char array directly, it's specialized to reverse char..
+        //..arrays with empty characters at the end of it.
+
+        resultCharArray[currentResultCharArrayIndex] = TurnSingleDigitToChar(From2To10(trio, 3));
+    }
+}
+
+int From2To10(const char* input, const int inputRealSize)
+{
+    int intResult = 0;
+
+    int j = 0;
+    for (int i = inputRealSize - 1; i >= 0; --i)
+    {
+        intResult += TurnCharToInt(input[i]) * (int)CalculatePower(2, j);
+        j++;
+    }
+
+    return intResult;
+}
+
+void From2To16()
+{
+    
+}
+
+void From10To2()
 {
 
 }
@@ -129,31 +202,8 @@ void From8To2()
 
 }
 
-int From2To10(const char* userInput, const int userInputRealSize)
-{
-    int intResult = 0;
-
-    int j = 0;
-    for (int i = 0; i < userInputRealSize; ++i)
-    {
-        intResult += userInput[i] * (int)CalculatePower(2, j);
-        j++;
-    }
-
-    return intResult;
-}
-
-void From10To2()
-{
-
-}
-
-void From2To16()
-{
-
-}
-
 void From16To2()
 {
 
 }
+#pragma endregion

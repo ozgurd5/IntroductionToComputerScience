@@ -4,10 +4,10 @@ project(IntroductionToComputerScience C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(IntroductionToComputerScience
-        S1Week1.c
+        StorageUnitConverter.c
         MainFile.c
-        S1Week1.h
-        S1Week2.c
-        S1Week2.h
+        StorageUnitConverter.h
+        BaseConverter.c
+        BaseConverter.h
         OzgurLibrary.c
         OzgurLibrary.h)
