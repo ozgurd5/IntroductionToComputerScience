@@ -9,6 +9,7 @@ void CopyPasteCharArray(char* arrayToPaste, const size_t arrayToPasteSize, const
 void PrintCharArray(const char* charArray, const size_t charArraySize);
 int IsCharArrayContainsOnlyNumber(const char* charArray, const size_t charArraySize);
 void TurnIntToCharArray(int intValue, char* charArray, const size_t charArraySize);
+int TurnCharArrayToInt(const char* charArray, const size_t charArraySize);
 char TurnSingleDigitToChar(const int singleDigitValue);
 int TurnCharToInt(const char charValue);
 void ReverseCharArray(char* charArray, const size_t charArraySize);

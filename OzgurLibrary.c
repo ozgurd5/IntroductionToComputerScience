@@ -72,6 +72,20 @@ void TurnIntToCharArray(int intValue, char* charArray, const size_t charArraySiz
     ReverseCharArray(charArray, charArraySize);
 }
 
+int TurnCharArrayToInt(const char* charArray, const size_t charArraySize)
+{
+    int result = 0;
+    int currentDigit = 1;
+
+    for (int i = (int)charArraySize - 1; i >= 0; --i)
+    {
+       result += TurnCharToInt(charArray[i]) * currentDigit;
+       currentDigit *= 10;
+    }
+
+    return result;
+}
+
 char TurnSingleDigitToChar(const int singleDigitValue)
 {
     return (char)(singleDigitValue + 48); //Numbers starts from 48 in ASCII
