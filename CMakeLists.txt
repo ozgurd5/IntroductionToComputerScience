@@ -10,4 +10,6 @@ add_executable(IntroductionToComputerScience
         BaseConverter.c
         BaseConverter.h
         OzgurLibrary.c
-        OzgurLibrary.h)
+        OzgurLibrary.h
+        OzgurString.c
+        OzgurString.h)

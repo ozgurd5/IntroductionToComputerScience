@@ -73,6 +73,12 @@ build CMakeFiles/IntroductionToComputerScience.dir/OzgurLibrary.c.obj: C_COMPILE
   OBJECT_DIR = CMakeFiles\IntroductionToComputerScience.dir
   OBJECT_FILE_DIR = CMakeFiles\IntroductionToComputerScience.dir
 
+build CMakeFiles/IntroductionToComputerScience.dir/OzgurString.c.obj: C_COMPILER__IntroductionToComputerScience_unscanned_Debug C$:/Projects/IntroductionToComputerScience/OzgurString.c || cmake_object_order_depends_target_IntroductionToComputerScience
+  DEP_FILE = CMakeFiles\IntroductionToComputerScience.dir\OzgurString.c.obj.d
+  FLAGS = -g -std=gnu11 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\IntroductionToComputerScience.dir
+  OBJECT_FILE_DIR = CMakeFiles\IntroductionToComputerScience.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target IntroductionToComputerScience
@@ -81,7 +87,7 @@ build CMakeFiles/IntroductionToComputerScience.dir/OzgurLibrary.c.obj: C_COMPILE
 #############################################
 # Link the executable IntroductionToComputerScience.exe
 
-build IntroductionToComputerScience.exe: C_EXECUTABLE_LINKER__IntroductionToComputerScience_Debug CMakeFiles/IntroductionToComputerScience.dir/StorageUnitConverter.c.obj CMakeFiles/IntroductionToComputerScience.dir/MainFile.c.obj CMakeFiles/IntroductionToComputerScience.dir/BaseConverter.c.obj CMakeFiles/IntroductionToComputerScience.dir/OzgurLibrary.c.obj
+build IntroductionToComputerScience.exe: C_EXECUTABLE_LINKER__IntroductionToComputerScience_Debug CMakeFiles/IntroductionToComputerScience.dir/StorageUnitConverter.c.obj CMakeFiles/IntroductionToComputerScience.dir/MainFile.c.obj CMakeFiles/IntroductionToComputerScience.dir/BaseConverter.c.obj CMakeFiles/IntroductionToComputerScience.dir/OzgurLibrary.c.obj CMakeFiles/IntroductionToComputerScience.dir/OzgurString.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\IntroductionToComputerScience.dir
