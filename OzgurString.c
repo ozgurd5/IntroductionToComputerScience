@@ -1,7 +1,13 @@
 #include "OzgurString.h"
 
-#pragma region Private
-void CalculateStringSize(OzgurString* ozgurString)
+void CreateOzgurString(OzgurString* ozgurString, char* charArray, size_t charArraySize)
+{
+    ozgurString->_charArray = charArray;
+    ozgurString->_arraySize = charArraySize;
+    CalculateOzgurStringSize(ozgurString);
+}
+
+void CalculateOzgurStringSize(OzgurString* ozgurString)
 {
     int stringSize = 0;
 
@@ -12,18 +18,6 @@ void CalculateStringSize(OzgurString* ozgurString)
     }
 
     ozgurString->_stringSize = stringSize;
-}
-#pragma endregion
-
-#pragma region Public
-void CreateOzgurString(OzgurString* ozgurString, const char* charArray, const size_t charArraySize)
-{
-    //TODO: size_t - const params
-    ozgurString->_charArray = charArray;
-    ozgurString->_arraySize = charArraySize;
-    ozgurString->_stringSize = 0;
-
-    ClearOzgurString(ozgurString);
 }
 
 void ClearOzgurString(OzgurString* ozgurString)
@@ -36,23 +30,28 @@ void ClearOzgurString(OzgurString* ozgurString)
     ozgurString->_stringSize = 0;
 }
 
-void PrintOzgurString(OzgurString* ozgurString)
+void PrintOzgurString(OzgurString* ozgurString, short int hasEndLine)
 {
     for (int i = 0; i < ozgurString->_stringSize; ++i)
     {
         printf("%c", ozgurString->_charArray[i]);
     }
+
+    if (hasEndLine) printf("\n");
 }
 
 void CopyPasteOzgurString(OzgurString* ozgurStringToCopy, OzgurString* ozgurStringToPaste)
 {
-    short int isPasteArrayBigger = 0; //We have to delete the remaining indexes //TODO: BOOL
+    short int isPasteArrayBigger = 0; //We have to delete the remaining indexes if it is
     int copyLoopAmount;
 
-    if (ozgurStringToCopy > ozgurStringToPaste) {
+    //Calculation of the copy loop amount based on smaller array
+    if (ozgurStringToCopy > ozgurStringToPaste)
+    {
         copyLoopAmount = ozgurStringToPaste->_stringSize;
     }
-    else {
+    else
+    {
         copyLoopAmount = ozgurStringToCopy->_stringSize;
         isPasteArrayBigger = 1;
     }
@@ -62,6 +61,7 @@ void CopyPasteOzgurString(OzgurString* ozgurStringToCopy, OzgurString* ozgurStri
         ozgurStringToPaste->_charArray[i] = ozgurStringToCopy->_charArray[i];
     }
 
+    //Make the excess part empty
     if (isPasteArrayBigger)
     {
         for (int i = copyLoopAmount; i < ozgurStringToPaste->_stringSize; ++i)
@@ -77,6 +77,7 @@ void ReverseOzgurString(OzgurString* ozgurString)
 {
     char temp;
 
+    //i starts from beginning and goes to the middle, j starts from the end and goes to the middle
     int j = ozgurString->_stringSize - 1;
     for (int i = 0; i <= ozgurString->_stringSize / 2; ++i)
     {
@@ -95,6 +96,13 @@ int CastOzgurStringToInt(OzgurString* ozgurString)
 
     for (int i = ozgurString->_stringSize - 1; i >= 0; --i)
     {
+        //If number is negative
+        if (ozgurString->_charArray[i] == '-')
+        {
+            result *= -1;
+            break;
+        }
+
         result += placeValue * ((int)ozgurString->_charArray[i] - 48); //Numbers starts from 48 in ASCII
         placeValue *= 10;
     }
@@ -104,9 +112,19 @@ int CastOzgurStringToInt(OzgurString* ozgurString)
 
 void CastIntToOzgurString(int intValue, OzgurString* ozgurString)
 {
+    short int isIntValueNegative = 0;
+
+    if (intValue < 0)
+    {
+        isIntValueNegative = 1;
+        intValue *= -1;
+    }
+
     int newStringSize = 0;
 
-    for (int i = 0; i < ozgurString->_arraySize; ++i)
+    //Put every digit into the array, starting from ones place
+    int i; //We have to keep that value for negative
+    for (i = 0; i < ozgurString->_arraySize; ++i)
     {
         ozgurString->_charArray[i] = (char)(intValue % 10 + 48); //Numbers starts from 48 in ASCII
         intValue /= 10;
@@ -115,8 +133,75 @@ void CastIntToOzgurString(int intValue, OzgurString* ozgurString)
         if (intValue == 0) break;
     }
 
-    ReverseOzgurString(ozgurString);
-    //TODO: MAKE REMAINING INDEXES '\0'
+    //Put '-' at the end if intValue is negative
+    if (isIntValueNegative)
+    {
+        ozgurString->_charArray[i + 1] = '-';
+        newStringSize++;
+    }
+
+    //Make the rest of the array empty after putting every digit
+    for (i = newStringSize; i < ozgurString->_arraySize; ++i)
+    {
+        ozgurString->_charArray[i] = '\0';
+    }
+
     ozgurString->_stringSize = newStringSize;
+
+    //Since we started putting numbers in the array starting form ones place, we need to reverse the array in the end
+    ReverseOzgurString(ozgurString);
 }
-#pragma endregion
+
+int IsOzgurStringContainsOnlyNumber(OzgurString* ozgurString)
+{
+    for (int i = 0; i < ozgurString->_stringSize; ++i)
+    {
+        if (ozgurString->_charArray[i] != '0' && ozgurString->_charArray[i] != '1' && ozgurString->_charArray[i] != '2' &&
+            ozgurString->_charArray[i] != '3' && ozgurString->_charArray[i] != '4' && ozgurString->_charArray[i] != '5' &&
+            ozgurString->_charArray[i] != '6' && ozgurString->_charArray[i] != '7' && ozgurString->_charArray[i] != '8' &&
+            ozgurString->_charArray[i] != '9' && ozgurString->_charArray[0] != '-') return 0;
+    }
+
+    return 1;
+}
+
+void RunOzgurStringTests()
+{
+    OzgurString ozgurString1;
+    OzgurString ozgurString2;
+
+    char array1[] = "-1234";
+    char array2[] = "-5678";
+
+    CreateOzgurString(&ozgurString1, array1, 5);
+    CreateOzgurString(&ozgurString2, array2, 5);
+
+    PrintOzgurString(&ozgurString1, 0);
+    printf(": ozgurString1\n");
+
+    PrintOzgurString(&ozgurString2, 0);
+    printf(": ozgurString2\n");
+
+    int castedInt = CastOzgurStringToInt(&ozgurString1);
+    printf("%d: ozgurString1 as integer\n", castedInt);
+
+    ReverseOzgurString(&ozgurString1);
+    PrintOzgurString(&ozgurString1, 0);
+    printf(": ozgurString1 reversed\n");
+
+    int intToCast = -9876;
+    CastIntToOzgurString(intToCast, &ozgurString1);
+    PrintOzgurString(&ozgurString1, 0);
+    printf(": ozgurString1 as the integer %d\n", intToCast);
+
+    CopyPasteOzgurString(&ozgurString2, &ozgurString1);
+    PrintOzgurString(&ozgurString1, 0);
+    printf(": ozgurString1 as the ozgurString2\n");
+
+    int isOzgurStringContainsOnlyNumber = IsOzgurStringContainsOnlyNumber(&ozgurString1);
+    printf("%d: Is ozgurString1 contains only number", isOzgurStringContainsOnlyNumber);
+
+    ClearOzgurString(&ozgurString1);
+    PrintOzgurString(&ozgurString1, 1);
+    printf(": ozgurString1 cleaned");
+}
