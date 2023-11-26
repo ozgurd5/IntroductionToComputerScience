@@ -79,7 +79,7 @@ void ReverseOzgurString(OzgurString* ozgurString)
 
     //i starts from beginning and goes to the middle, j starts from the end and goes to the middle
     int j = ozgurString->_stringSize - 1;
-    for (int i = 0; i <= ozgurString->_stringSize / 2; ++i)
+    for (int i = 0; i < ozgurString->_stringSize / 2; ++i)
     {
         temp = ozgurString->_charArray[i];
         ozgurString->_charArray[i] = ozgurString->_charArray[j];
