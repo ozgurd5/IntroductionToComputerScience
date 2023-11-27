@@ -11,6 +11,4 @@ int main()
     //RunOzgurStringTests();
     //RunStorageUnitConverter();
     RunBaseConverter();
-
-    return  0;
 }

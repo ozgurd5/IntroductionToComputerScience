@@ -30,6 +30,19 @@ void ClearOzgurString(OzgurString* ozgurString)
     ozgurString->_stringSize = 0;
 }
 
+void FillOzgurStringWithZero(OzgurString* ozgurString)
+{
+    for (int i = 0; i < ozgurString->_stringSize; ++i) ozgurString->_charArray[i] = '0';
+}
+
+void MakeEmptyCharsZeroOzgurString(OzgurString* ozgurString)
+{
+    for (int i = ozgurString->_stringSize; i < ozgurString->_arraySize; ++i) ozgurString->_charArray[i] = '0';
+
+    ozgurString->_stringSize = (int)ozgurString->_arraySize;
+}
+
+
 void PrintOzgurString(OzgurString* ozgurString, short int hasEndLine)
 {
     for (int i = 0; i < ozgurString->_stringSize; ++i)

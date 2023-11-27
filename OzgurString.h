@@ -21,5 +21,7 @@ int CastOzgurStringToInt(OzgurString* ozgurString);
 void CastIntToOzgurString(int intValue, OzgurString* ozgurString);
 int IsOzgurStringContainsOnlyNumber(OzgurString* ozgurString);
 void ClearOzgurString(OzgurString* ozgurString);
+void FillOzgurStringWithZero(OzgurString* ozgurString);
+void MakeEmptyCharsZeroOzgurString(OzgurString* ozgurString);
 
 #endif //INTRODUCTIONTOCOMPUTERSCIENCE_OZGURSTRING_H

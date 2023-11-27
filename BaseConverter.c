@@ -12,17 +12,19 @@ int IsCharArrayBase8(const OzgurString* inputString);
 int IsCharArrayBase10(const OzgurString* inputString);
 int IsCharArrayBase16(const OzgurString* inputString);
 
+//TODO: carry these to the ozgurLibrary
 char TurnDecimalDigitToHexadecimalDigit(const int decimalDigit);
 int TurnHexadecimalDigitToDecimal(const char hexadecimalDigit);
+
 int From2To10(const OzgurString * inputString);
-void From2To8(OzgurString* inputString, OzgurString * outputString);
-void From2To16(OzgurString* inputString, OzgurString * outputString);
+void From2To8or16(OzgurString* inputString, OzgurString * outputString, short int isToHex);
 void From10To2(OzgurString* inputString, OzgurString* outputString);
-void From8To2(OzgurString* inputString, OzgurString* outputString);
-void From16To2(OzgurString* inputString, OzgurString* outputString);
+void From8or16To2(OzgurString* inputString, OzgurString* outputString, short int isFromHex);
 
 //TODO: input size restrictions
 //TODO: negative conversion
+//TODO: 2to10 returns ozgurString
+//TODO: general xTo10 function
 
 void RunBaseConverter()
 {
@@ -63,37 +65,56 @@ void RunBaseConverter()
     //Take Output Base
     printf("Select base to convert ");
     PrintCharArray(inputArray, sizeof inputArray);
-    printf("(%d) \"to\" (2-8-10-16):\n", inputBase);
+    printf("(%d) \"to\" (2-8-10-16, different from the input base):\n", inputBase);
     while (1)
     {
         scanf("%d", &outputBase);
-        if (outputBase == 2 || outputBase == 8 || outputBase == 10 || outputBase == 16) break;
-        else printf("Error. Please select a base again: (2-8-10-16)\n");
+        if (outputBase != inputBase && (outputBase == 2 || outputBase == 8 || outputBase == 10 || outputBase == 16)) break;
+        else printf("Error. Please select a base again: (2-8-10-16, different from the input base)\n");
     }
 
     //Calculate Output
-    if (outputBase == 10)
+    if (inputBase == 2) From2To8or16(&inputString, &outputString, outputBase == 16);
+    else if (outputBase == 2) From8or16To2(&inputString, &outputString, inputBase == 16);
+
+    else if (inputBase == 10)
+    {
+        if (outputBase == 2) From10To2(&inputString, &outputString);
+
+        else
+        {
+            char tempChar[20];
+            ClearCharArray(tempChar, 20);
+            OzgurString tempString;
+            CreateOzgurString(&tempString, tempChar, 20);
+
+            From10To2(&inputString, &tempString);
+            From2To8or16(&tempString, &outputString, outputBase == 16);
+        }
+    }
+
+    else if (outputBase == 10)
     {
         if (inputBase == 2) CastIntToOzgurString(From2To10(&inputString), &outputString);
 
-        else if (inputBase == 8)
+        else
         {
-            From8To2(&inputString, &outputString);
-            CastIntToOzgurString(From2To10(&outputString), &outputString);
-        }
-
-        else if (inputBase == 16)
-        {
-            From16To2(&inputString, &outputString);
+            From8or16To2(&inputString, &outputString, inputBase == 16);
             CastIntToOzgurString(From2To10(&outputString), &outputString);
         }
     }
 
-    else if (inputBase == 2 && outputBase == 8) From2To8(&inputString, &outputString);
-    else if (inputBase == 2 && outputBase == 16) From2To16(&inputString, &outputString);
-    else if (inputBase == 10 && outputBase == 2) From10To2(&inputString, &outputString);
-    else if (inputBase == 8 && outputBase == 2) From8To2(&inputString, &outputString);
-    else if (inputBase == 16 && outputBase == 2) From16To2(&inputString, &outputString);
+    //8 -> 16 or 16 -> 8
+    else
+    {
+        char tempChar[20];
+        ClearCharArray(tempChar, 20);
+        OzgurString tempString;
+        CreateOzgurString(&tempString, tempChar, 20);
+
+        From8or16To2(&inputString, &tempString, inputBase == 16);
+        From2To8or16(&tempString, &outputString, outputBase == 16);
+    }
 
     //Print Output
     CalculateOzgurStringSize(&outputString);
@@ -181,50 +202,6 @@ int TurnHexadecimalDigitToDecimal(const char hexadecimalDigit)
     else return (int)hexadecimalDigit - 55; //Capital letters starts from 65 in ASCII. Example: hex: A -> ascii: 65 -> decimal: 10
 }
 
-void From2To8(OzgurString* inputString, OzgurString * outputString)
-{
-    //Divides binary number into groups of three, converts each group to decimal and puts them in the outputString.
-    //We have to group and put them in reverse. Example: 1001 (base2) = (1)(001) (base2) = (1)(1) (base8) = 11 (base8)
-
-    int outputDigitNumber;
-    if (inputString->_stringSize % 3 == 0) outputDigitNumber = inputString->_stringSize / 3;
-    else outputDigitNumber = inputString->_stringSize / 3 + 1;
-
-    char trioArray[3];
-    ClearCharArray(trioArray, 3);
-
-    OzgurString trioString;
-    CreateOzgurString(&trioString, trioArray, 3);
-
-    int currentTrioIndex = 0;
-    int currentOutputStringIndex = outputDigitNumber - 1;
-
-    for (int i = inputString->_stringSize - 1; i >= 0; --i)
-    {
-        trioString._charArray[currentTrioIndex] = inputString->_charArray[i];
-        currentTrioIndex++;
-
-        if (currentTrioIndex == 3)
-        {
-            trioString._stringSize = 3; //TODO: illegal?
-
-            outputString->_charArray[currentOutputStringIndex] = TurnSingleDigitToChar(From2To10(&trioString));
-            currentOutputStringIndex--;
-
-            currentTrioIndex = 0;
-            ClearOzgurString(&trioString);
-        }
-    }
-
-    if (currentTrioIndex != 0) //In this condition trio may be (x is '\0'): 0xx, 00x, 1xx, 11x
-    {
-        trioString._stringSize = currentTrioIndex;
-        outputString->_charArray[currentOutputStringIndex] = TurnSingleDigitToChar(From2To10(&trioString));
-    }
-
-    CalculateOzgurStringSize(outputString);
-}
-
 int From2To10(const OzgurString * inputString)
 {
     int intResult = 0;
@@ -239,52 +216,6 @@ int From2To10(const OzgurString * inputString)
     return intResult;
 }
 
-//TODO: 2to8 and 2to16 very similar, DRY!
-
-void From2To16(OzgurString* inputString, OzgurString * outputString)
-{
-    //Divides binary number into groups of three, converts each group to decimal and puts them in the outputString.
-    //We have to group and put them in reverse. Example: 101101 (base2) = (10)(1101) (base2) = (2)(D) (base16) = 2D (base16)
-
-    int outputDigitNumber;
-    if (inputString->_stringSize % 4 == 0) outputDigitNumber = inputString->_stringSize / 4;
-    else outputDigitNumber = inputString->_stringSize / 4 + 1;
-
-    char quadArray[4];
-    ClearCharArray(quadArray, 4);
-
-    OzgurString quadString;
-    CreateOzgurString(&quadString, quadArray, 4);
-
-    int currentQuadIndex = 0;
-    int currentOutputStringIndex = outputDigitNumber - 1;
-
-    for (int i = inputString->_stringSize - 1; i >= 0; --i)
-    {
-        quadString._charArray[currentQuadIndex] = inputString->_charArray[i];
-        currentQuadIndex++;
-
-        if (currentQuadIndex == 4)
-        {
-            quadString._stringSize = 4; //TODO: illegal?
-
-            outputString->_charArray[currentOutputStringIndex] = TurnDecimalDigitToHexadecimalDigit(From2To10(&quadString));
-            currentOutputStringIndex--;
-
-            currentQuadIndex = 0;
-            ClearOzgurString(&quadString);
-        }
-    }
-
-    if (currentQuadIndex != 0) //In this condition quad may be (x is '\0'): 0xxx, 00xx, 000x, 1xxx, 11xx, 111x
-    {
-        quadString._stringSize = currentQuadIndex;
-        outputString->_charArray[currentOutputStringIndex] = TurnDecimalDigitToHexadecimalDigit(From2To10(&quadString));
-    }
-
-    CalculateOzgurStringSize(outputString);
-}
-
 void From10To2(OzgurString* inputString, OzgurString* outputString)
 {
     int intInput = CastOzgurStringToInt(inputString);
@@ -297,49 +228,161 @@ void From10To2(OzgurString* inputString, OzgurString* outputString)
         i++;
     }
 
+    CalculateOzgurStringSize(outputString);
+
     //We have to reverse the output string because we put the remainders in order. We should put remainders in reverse
-    outputString->_stringSize = i; //TODO: illegal?
     ReverseOzgurString(outputString);
 }
 
-void From8To2(OzgurString* inputString, OzgurString* outputString)
+void From2To8or16(OzgurString* inputString, OzgurString * outputString, short int isToHex)
 {
-    char trioArray[3];
-    ClearCharArray(trioArray, 3);
+    //Starting from the end, divides binary number into groups of three or four, converts each group to decimal and puts them in the outputString.
+    //Example: 10101 (base2) = (10)(101) (base2) = (2)(5) (base8) = 25 (base8)
+    //Example: 10101 (base2) = (1)(0101) (base2) = (1)(5) (base16) = 15 (base16)
 
-    OzgurString trioString;
-    CreateOzgurString(&trioString, trioArray, 3);
+    //Calculate group size
+    int groupSize;
+    if (isToHex) groupSize = 4;
+    else groupSize = 3;
 
-    char currentDigit = '\0';
-    OzgurString currentDigitString;
-    CreateOzgurString(&currentDigitString, &currentDigit, 1);
+    //We will put numbers to the outputString reverse but not starting from the end, this will help us where to start.
+    int outputDigitNumber;
+    if (inputString->_stringSize % groupSize == 0) outputDigitNumber = inputString->_stringSize / groupSize;
+    else outputDigitNumber = inputString->_stringSize / groupSize + 1;
 
-    for (int i = 0; i < inputString->_stringSize; ++i)
+    //This will carry groups of 3 or 4
+    char bufferArray[groupSize];
+    ClearCharArray(bufferArray, groupSize);
+    OzgurString bufferString;
+    CreateOzgurString(&bufferString, bufferArray, groupSize);
+
+    //We are reading input from the end, so we have to put numbers to the buffer from the end: 011 -> xx1 -> x11 -> 011
+    int currentBufferIndex = groupSize - 1;
+
+    //This is where to start putting numbers to the outputString: (2)(5)(base8) -> XXxxx -> X5xxx -> 25xxx
+    int currentOutputStringIndex = outputDigitNumber - 1;
+
+    //Starting from the end, numbers to the buffer, convert buffer to the decimal and put it to the outputString
+    for (int i = inputString->_stringSize - 1; i >= 0; --i)
     {
-        From10To2(&currentDigitString, &trioString);
+        //Put numbers to the buffer
+        bufferString._charArray[currentBufferIndex] = inputString->_charArray[i];
+        //CalculateOzgurStringSize(&bufferString); //Inefficient, no need to calculate it everytime. Calculate it when needed
+        currentBufferIndex--;
 
-        for (int j = 0; j < 3; ++j) outputString->_charArray[i + j] = trioString._charArray[j];
+        if (currentBufferIndex == -1) //When the group is full
+        {
+            //Convert bufferString to decimal, make it char and put it to the outputString
+            CalculateOzgurStringSize(&bufferString);
+            outputString->_charArray[currentOutputStringIndex] = TurnDecimalDigitToHexadecimalDigit(From2To10(&bufferString));
+            currentOutputStringIndex--;
+
+            //Make bufferString ready for another group
+            currentBufferIndex = groupSize - 1;
+            ClearOzgurString(&bufferString);
+        }
     }
+
+    //When the last group is not full: x11, xx01, x10, xx01 etc.
+    if (currentBufferIndex != groupSize - 1)
+    {
+        //x11 or xxx1 is not a correct form. It should be 11x or 1xxx. Arrange buffer
+        //TODO: function?
+        for (int i = 0; i < groupSize; ++i) //Try to find empty character
+        {
+            if (bufferArray[i] == '\0') //Empty character found
+            {
+                for (int j = i + 1; j < groupSize; ++j) //Try to find a normal character after the empty character
+                {
+                    if (bufferArray[j] != '\0') //Normal character found
+                    {
+                        //Swap them
+                        char temp = bufferArray[i];
+                        bufferArray[i] = bufferArray[j];
+                        bufferArray[j] = temp;
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        //Put the last group to the outputString
+        CalculateOzgurStringSize(&bufferString);
+        outputString->_charArray[currentOutputStringIndex] = TurnSingleDigitToChar(From2To10(&bufferString));
+    }
+
+    CalculateOzgurStringSize(outputString);
 }
 
-void From16To2(OzgurString* inputString, OzgurString* outputString)
+void From8or16To2(OzgurString* inputString, OzgurString* outputString, short int isFromHex)
 {
-    char quadArray[4];
-    ClearCharArray(quadArray, 4);
+    //Starting from the end, converts each digit to binary and puts them in the outputString
 
-    OzgurString quadString;
-    CreateOzgurString(&quadString, quadArray, 4);
+    //Calculate group size
+    int groupSize;
+    if (isFromHex) groupSize = 4;
+    else groupSize = 3;
 
-    char currentDigit = '\0';
-    OzgurString currentDigitString;
-    CreateOzgurString(&currentDigitString, &currentDigit, 1);
+    //This will carry decimal equivalent of each digit, so we can convert them to binary. Its size is 2 because hex letters are 2 digits numbers
+    char decimalBufferArray[2];
+    ClearCharArray(decimalBufferArray, 2);
+    OzgurString decimalBufferString;
+    CreateOzgurString(&decimalBufferString, decimalBufferArray, 2);
 
+    //This will carry binary equivalent of each digit.
+    char binaryBufferArray[groupSize];
+    ClearCharArray(binaryBufferArray, groupSize);
+    OzgurString binaryBufferString;
+    CreateOzgurString(&binaryBufferString, binaryBufferArray, groupSize);
+
+    int currentOutputStringIndex = 0;
     for (int i = 0; i < inputString->_stringSize; ++i)
     {
-        currentDigitString._charArray[0] = inputString->_charArray[i];
-        From10To2(&currentDigitString, &quadString);
+        CastIntToOzgurString(TurnHexadecimalDigitToDecimal(inputString->_charArray[i]), &decimalBufferString);
+        From10To2(&decimalBufferString, &binaryBufferString);
 
-        for (int j = 0; j < 4; ++j) outputString->_charArray[i + j] = quadString._charArray[j];
+        //We don't need to format the binaryBufferString because outputString must not start with 0, so we won't execute the first if statement.
+        if (i == 0)
+        {
+            //TODO: explain
+            for (int j = 0; j < binaryBufferString._stringSize; ++j)
+            {
+                outputString->_charArray[currentOutputStringIndex] = binaryBufferString._charArray[j];
+                currentOutputStringIndex++;
+            }
+            continue;
+        }
+
+        //binaryBufferString's stringSize must always be equal to groupSize. If we are converting from hexadecimal then it must be 0110..
+        //..instead of 110 or 0010 instead of 10. If we are converting from octal than it must be 011 instead of 11 etc.
+        //To do that we must shift numbers to the right and add zero(es) to the beginning.
+
+        //If From10To2() function gives a correct digit output (4 digits for hex, 3 digits for octal) (which means stringSize == arraySize)..
+        //..don't shift anything
+        if (binaryBufferString._stringSize != binaryBufferString._arraySize)
+        {
+            int shiftAmount = groupSize - binaryBufferString._stringSize;
+
+            MakeEmptyCharsZeroOzgurString(&binaryBufferString);
+            for (int j = binaryBufferString._stringSize - 1; j >= 0 ; --j)
+            {
+                binaryBufferString._charArray[j + shiftAmount] = binaryBufferString._charArray[j];
+                binaryBufferString._charArray[j] = '0';
+                //CalculateOzgurStringSize(&binaryBufferString) //We don't need the stringSize of the binaryBufferString after here
+            }
+        }
+
+        //Put the decimalBufferString to the outputString
+        for (int j = 0; j < groupSize; ++j)
+        {
+            outputString->_charArray[currentOutputStringIndex] = binaryBufferString._charArray[j];
+            currentOutputStringIndex++;
+        }
+
+        ClearOzgurString(&binaryBufferString);
     }
+
+    CalculateOzgurStringSize(outputString);
 }
 #pragma endregion
