@@ -31,7 +31,7 @@ void RunStorageUnitConverter()
 
     //GET THE FIRST UNIT AMOUNT
     printf("Please enter the amount of ");
-    PrintCharArray(firstUnitName, sizeof firstUnitName);
+    PrintArray(firstUnitName, sizeof firstUnitName, CHAR);
     printf(" you want to convert:\n");
     scanf("%Lf", &firstUnitAmount);
 
@@ -48,9 +48,9 @@ void RunStorageUnitConverter()
     //CALCULATE AND PRINT THE SECOND UNIT AMOUNT
     secondUnitAmount = CalculateSecondAmount(firstUnitID, firstUnitAmount, secondUnitID);
     printf("%Lf ", firstUnitAmount);
-    PrintCharArray(firstUnitName, sizeof firstUnitName);
+    PrintArray(firstUnitName, sizeof firstUnitName, CHAR);
     printf(" is equal to %Lf ", secondUnitAmount);
-    PrintCharArray(secondUnitName, sizeof secondUnitName);
+    PrintArray(secondUnitName, sizeof secondUnitName, CHAR);
 }
 
 void PrintUnits()
@@ -62,12 +62,12 @@ void DecideForUnitName(char* unitNameArray, const int unitID)
 {
     //Since the last char of the strings are automatically '\0', their sizes are one more of the letter number
     //It's not important for 8 letter units though, since the UnitName arrays' lengths are 8
-    if (unitID == 0) CopyPasteCharArray(unitNameArray, sizeof unitNameArray, "Bit", 4);
-    else if (unitID == 1) CopyPasteCharArray(unitNameArray, sizeof unitNameArray, "Byte", 5);
-    else if (unitID == 2) CopyPasteCharArray(unitNameArray, sizeof unitNameArray, "KiloByte", 9);
-    else if (unitID == 3) CopyPasteCharArray(unitNameArray, sizeof unitNameArray, "MegaByte", 9);
-    else if (unitID == 4) CopyPasteCharArray(unitNameArray, sizeof unitNameArray, "GigaByte", 9);
-    else if (unitID == 5) CopyPasteCharArray(unitNameArray, sizeof unitNameArray, "TeraByte", 9);
+    if (unitID == 0) CopyPasteArray(unitNameArray, sizeof unitNameArray, "Bit", 4);
+    else if (unitID == 1) CopyPasteArray(unitNameArray, sizeof unitNameArray, "Byte", 5);
+    else if (unitID == 2) CopyPasteArray(unitNameArray, sizeof unitNameArray, "KiloByte", 9);
+    else if (unitID == 3) CopyPasteArray(unitNameArray, sizeof unitNameArray, "MegaByte", 9);
+    else if (unitID == 4) CopyPasteArray(unitNameArray, sizeof unitNameArray, "GigaByte", 9);
+    else if (unitID == 5) CopyPasteArray(unitNameArray, sizeof unitNameArray, "TeraByte", 9);
 }
 
 long double CalculateSecondAmount(const int firstUnitID, const long double firstUnitAmount, const int secondUnitNumber)

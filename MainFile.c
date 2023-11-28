@@ -9,6 +9,6 @@
 int main()
 {
     //RunOzgurStringTests();
-    //RunStorageUnitConverter();
-    RunBaseConverter();
+    RunStorageUnitConverter();
+    //RunBaseConverter();
 }

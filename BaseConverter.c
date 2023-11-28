@@ -64,7 +64,7 @@ void RunBaseConverter()
 
     //Take Output Base
     printf("Select base to convert ");
-    PrintCharArray(inputArray, sizeof inputArray);
+    PrintArray(inputArray, sizeof inputArray, CHAR);
     printf("(%d) \"to\" (2-8-10-16, different from the input base):\n", inputBase);
     while (1)
     {
@@ -209,7 +209,7 @@ int From2To10(const OzgurString * inputString)
     int j = 0;
     for (int i = inputString->_stringSize - 1; i >= 0; --i)
     {
-        intResult += TurnCharToInt(inputString->_charArray[i]) * (int)CalculatePower(2, j);
+        intResult += TurnCharToInt(inputString->_charArray[i]) * (int) CalculatePower(2, j);
         j++;
     }
 
